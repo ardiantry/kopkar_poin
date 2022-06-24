@@ -35,6 +35,7 @@ Manage Point
     <div class="container">
         <table class="table centerW">
             <tr>
+                 <th>Nama Member</th>
                 <th>id_transaksi</th>
                 <th>tanggal_poin</th>
                 <th>id_user</th>
@@ -120,6 +121,7 @@ Manage Point
                 var let_ = '';
                 for (let key of data.db_get.data) {
                     let_ += `<tr>
+                            <th>` + key.name + `</th>
 							<th>` + key.id_transaksi + `</th>
 							<th>` + key.tanggal_poin + `</th>
 							<th>` + key.id_user + `</th>

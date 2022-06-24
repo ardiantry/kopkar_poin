@@ -54,18 +54,20 @@ class PointController extends Controller
                     ->where('status', 'aktif')
                     ->get();
                 $nom = 0;
+                $totalpoinsebelumnya=0;
                 foreach ($db_get as $key2) {
                     $nom +=    @$key2->nominal;
+                    $totalpoinsebelumnya+=@$key2->jumlah_poin;
                 }
 
                 if ($nominal_awal > $nominal_min) {
-                    $ttl_           = floor(($nom + $nominal_awal) / $nominal_min);
+                    $ttl_           = (floor(($nom + $nominal_awal) / $nominal_min))-$totalpoinsebelumnya;
                     $db_get         = DB::table('tb_poin_fandi')->where('id_transaksi', @$key->{'TRANSACTION_ID'})->first();
                     if (!$db_get) 
                     {
                         DB::table('tb_poin_fandi')->insert(
                             [
-                                'jumlah_poin'   => $ttl_,
+                                'jumlah_poin'   => abs($ttl_),
                                 'id_transaksi'  => @$key->{'TRANSACTION_ID'},
                                 'tanggal_poin'  => @$created_at,
                                 'id_user'       => strtolower(@$key->{'created_by'}->{'USER_FULLNAME'}),
@@ -102,7 +104,10 @@ class PointController extends Controller
 
     public function gettablepoin(Request $request)
     {
-        $db_get         = DB::table('tb_poin_fandi')->where('status', 'aktif')->orderBy('tanggal_poin', 'DESC')->paginate(20);
+        $db_get         = DB::table('tb_poin_fandi')
+        ->select('tb_poin_fandi.*','users.name')
+        ->leftJoin('users','tb_poin_fandi.id_user','=','users.member_id')
+        ->where('tb_poin_fandi.status', 'aktif')->orderBy('tb_poin_fandi.tanggal_poin', 'DESC')->paginate(20);
         print json_encode(array('db_get' => $db_get));
     }
 
