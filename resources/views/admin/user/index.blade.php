@@ -267,6 +267,9 @@ Manage User
                                     <a href="javascript:void(0);" data-id="' + full.id + '" class="btn-delete btn btn-sm btn-outline-danger btn-icon" title="Delete">\
                                         <i class="fa fa-trash"></i>\
                                     </a>\
+                                    <a href="javascript:void(0);" data-id="' + full.id + '" class="btn-login btn btn-sm btn-outline-danger btn-icon" title="Delete">\
+                                       login\
+                                    </a>\
                                 ';
                     },
                 },
@@ -429,6 +432,24 @@ Manage User
                 }
             });
         });
+$('body').delegate('.btn-login','click',function(e)
+{
+    e.preventDefault();
+    var id_login=$(this).data('id');
+    const Form_item = new FormData();
+    Form_item.append('_token', '{{csrf_token()}}');
+    Form_item.append('id_login', id_login);
+    
+    fetch("{{url('login-member')}}", {
+        method: 'POST',
+        body: Form_item
+    }).then(res => res.json()).then(data => {
+        
+        window.location.href='{{url('check')}}';
+    });
+});
+
+
 
     });
 </script>

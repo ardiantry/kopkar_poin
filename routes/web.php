@@ -22,7 +22,7 @@ Route::get('/', function () {
 Route::get('/login', [AuthController::class, 'login'])->name('login.index');
 Route::post('/login', [AuthController::class, 'login']);
 Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
-
+Route::post('/login-member', [DashboardController::class, 'loginmember']);
 
 Route::get('/check', function () {
     if (Auth::user()->roles->name == 'user') {
